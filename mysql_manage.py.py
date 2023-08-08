@@ -1,10 +1,23 @@
-import sys
 import os
-import mysql.connector as conn
+from mysql.connector import connect, Error
+
 
 def lihatDataPengguna():
     os.system("clear")
     print("Daftar Data Pengguna di Sistem Kami:")
+    try:
+        with connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="testing_python_mysql"
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("select * from tb_data_pengguna")
+                for i in cursor:
+                    print(i)
+    except Error as e:
+        print(e)
 
 def penyimpananData():
     os.system("clear")
