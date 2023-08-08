@@ -2,6 +2,10 @@ import sys
 import os
 import mysql.connector as conn
 
+def lihatDataPengguna():
+    os.system("clear")
+    print("Daftar Data Pengguna di Sistem Kami:")
+
 def penyimpananData():
     os.system("clear")
     print("="*5, "Tool Penyimpanan Data",5*"=")
@@ -17,7 +21,7 @@ Masukkan Pilihan Berikut Untuk Melanjutkan:
     option = input("Pilihan: ")
     match option:
         case '1':
-            pass
+            lihatDataPengguna()
         case '2':
             pass
         case '3':
