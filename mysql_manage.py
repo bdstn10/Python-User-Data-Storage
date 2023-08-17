@@ -15,7 +15,43 @@ def lihatDataPengguna():
             with connection.cursor() as cursor:
                 cursor.execute("select * from tb_data_pengguna")
                 for i in cursor:
-                    print(i)
+                    print(f"\nId: {i[0]}")
+                    print(f"Nama: {i[1]}")
+                    print(f"Umur: {i[2]}")
+                    print(f"Alamat: {i[3]}")
+                
+                input("\nPress Enter To Continue... ")
+                main()
+    except Error as e:
+        print(e)
+
+def simpanDataPengguna():
+    os.system("clear") 
+    print("Masukkan Data Pengguna Untuk Disimpan")
+    nama = input("Nama: ")
+    umur = input("Umur: ")
+    alamat = input("Alamat: ")
+    
+    try:
+        with connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="testing_python_mysql"
+        ) as connection:
+            with connection.cursor() as cursor:
+                query = f"INSERT INTO `tb_data_pengguna` VALUES (NULL, '{nama}', '{umur}', '{alamat}')"
+                cursor.execute(query)
+                
+                connection.commit()
+                
+                if(cursor.rowcount > 0):
+                    print(f"\nBerhasil menyimpan data user '{nama}' ke database!")
+                else:
+                    print("\nGagal menyimpan data user!")
+                
+                input("\nPress Enter To Continue... ")
+                penyimpananData()
     except Error as e:
         print(e)
 
@@ -36,7 +72,7 @@ Masukkan Pilihan Berikut Untuk Melanjutkan:
         case '1':
             lihatDataPengguna()
         case '2':
-            pass
+            simpanDataPengguna()
         case '3':
             main()
         case _:

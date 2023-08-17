@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 08, 2023 at 08:17 AM
--- Server version: 10.4.22-MariaDB
--- PHP Version: 8.1.1
+-- Generation Time: Aug 17, 2023 at 06:30 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.0.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -39,7 +39,12 @@ CREATE TABLE `tb_data_pengguna` (
 --
 
 INSERT INTO `tb_data_pengguna` (`id`, `nama`, `umur`, `alamat`) VALUES
-(2, 'Budi Setiawan', 17, 'Sleman');
+(2, 'Budi Setiawan', 17, 'Sleman'),
+(3, 'Eka Surya A', 17, 'Jogja'),
+(4, 'Budi', 18, 'Jogja24jam'),
+(5, 'Luqman Hakim', 17, 'Kidul STEMSA'),
+(6, 'Miranti Mitayani', 16, 'Bantul'),
+(7, '', 0, 'd');
 
 --
 -- Indexes for dumped tables
@@ -59,7 +64,7 @@ ALTER TABLE `tb_data_pengguna`
 -- AUTO_INCREMENT for table `tb_data_pengguna`
 --
 ALTER TABLE `tb_data_pengguna`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
