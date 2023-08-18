@@ -21,7 +21,7 @@ def lihatDataPengguna():
                     print(f"Alamat: {i[3]}")
                 
                 input("\nPress Enter To Continue... ")
-                main()
+                penyimpananData()
     except Error as e:
         print(e)
 
@@ -32,28 +32,48 @@ def simpanDataPengguna():
     umur = input("Umur: ")
     alamat = input("Alamat: ")
     
-    try:
-        with connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="testing_python_mysql"
-        ) as connection:
-            with connection.cursor() as cursor:
-                query = f"INSERT INTO `tb_data_pengguna` VALUES (NULL, '{nama}', '{umur}', '{alamat}')"
-                cursor.execute(query)
-                
-                connection.commit()
-                
-                if(cursor.rowcount > 0):
-                    print(f"\nBerhasil menyimpan data user '{nama}' ke database!")
-                else:
-                    print("\nGagal menyimpan data user!")
-                
-                input("\nPress Enter To Continue... ")
-                penyimpananData()
-    except Error as e:
-        print(e)
+    isInputHaveFilled = (nama.__len__() > 0) and (umur.__len__() > 0)  and (alamat.__len__() > 0)
+    
+    if isInputHaveFilled:
+        isNamaAlphabet = nama.isalpha()
+        isUmurNum = umur.isnumeric()
+    
+        if not isNamaAlphabet:
+            print("Mohon isi nama hanya dengan huruf alphabet!")
+            input("\nEnter To Continue... ")
+            penyimpananData()
+        if not isUmurNum:
+            print("Mohon isi umur hanya dengan angka saja!")
+            input("\nEnter To Continue... ")
+            penyimpananData()
+        
+        try:
+            with connect(
+                host="localhost",
+                user="root",
+                password="",
+                database="testing_python_mysql"
+            ) as connection:
+                with connection.cursor() as cursor:
+                    query = f"INSERT INTO `tb_data_pengguna` VALUES (NULL, '{nama}', '{umur}', '{alamat}')"
+                    cursor.execute(query)
+                    
+                    connection.commit()
+                    
+                    if(cursor.rowcount > 0):
+                        print(f"\nBerhasil menyimpan data user '{nama}' ke database!")
+                    else:
+                        print("\nGagal menyimpan data user!")
+                    
+                    input("\nPress Enter To Continue... ")
+                    penyimpananData()
+        except Error as e:
+            print(e)
+        
+    else:
+        print("Mohon lengkapi semua form input yang diminta!")
+        input("\nEnter To Continue... ")
+        penyimpananData()
 
 def penyimpananData():
     os.system("clear")
@@ -100,7 +120,7 @@ Silahkan Masukkan Angka Dari Option Berikut Untuk Melanjutkan:
             penyimpananData()
         case '2':
             print("Selamat Tinggal Orang Baikk:)")
-            return
+            exit()
         case _:
             salahInputHandle(main)
 if __name__ == '__main__':
