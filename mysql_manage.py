@@ -75,6 +75,72 @@ def simpanDataPengguna():
         input("\nEnter To Continue... ")
         penyimpananData()
 
+def verifikasiUbahDataPengguna():
+    os.system("clear")
+    print("Masukkan Id Pengguna Yang Ingin diUbah Datanya")
+    idToUpdate = input("Id: ")
+    
+    # Pengecekan agar Id benar-benar diisi dan berupa angka
+    if (idToUpdate.__len__() < 1) or not idToUpdate.isnumeric():
+        print("Mohon Masukkan Id Pengguna Dengan Benar!")
+        
+        input("\nEnter Untuk Kembali... ")
+        verifikasiUbahDataPengguna()
+    
+    try:
+        with connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="testing_python_mysql"
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(f"select * from tb_data_pengguna where id={idToUpdate}")
+                dataUser =  cursor.fetchall()
+                
+                # Pengecekan untuk memastikan data yang hendak diubah terdapat di sistem
+                if cursor.rowcount < 1:
+                    print("Maaf, data yang anda minta tidak terdapat di sistem!")
+                    input("\nEnter To Continue... ")
+                    penyimpananData()
+                
+                # os.system("clear")
+                print("Apakah data berikut yang ingin anda ubah: ")    
+                
+                for data in dataUser:
+                    print(f"\nId: {data[0]}")
+                    print(f"Nama: {data[1]}")
+                    print(f"Umur: {data[2]}")
+                    print(f"Alamat: {data[3]}")
+                
+                konfirmasiAksi = input("\ny/(Yes), n/(No), b/(Back)? ")
+                
+                match konfirmasiAksi:
+                    case 'y':
+                        os.system("clear")
+                        dataToUpdate = list(dataUser[0])
+                        print("Masukkan Data Baru Untuk diUpdate Ke Pengguna Yang Bersangkutan: ")
+                        dataToUpdate[1] = input("Nama: ")
+                        dataToUpdate[2] = input("Umur: ")
+                        dataToUpdate[3] = input("Alamat: ")
+                        
+                        cursor.execute(f"UPDATE tb_data_pengguna SET nama='{dataToUpdate[1]}', umur='{dataToUpdate[2]}', alamat='{dataToUpdate[3]}' WHERE id={idToUpdate}")
+                        connection.commit()
+                        
+                        if cursor.rowcount > 0:
+                            print("Berhasil Mengupdate Data User!")
+                            input("\nEnter To Continue... ")
+                            penyimpananData()
+                    case 'n':
+                        verifikasiUbahDataPengguna()
+                    case 'b':
+                        penyimpananData()
+                    case _:
+                        salahInputHandle(penyimpananData)
+                
+    except Error as e:
+        print(e)
+    
 def penyimpananData():
     os.system("clear")
     print("="*5, "Tool Penyimpanan Data",5*"=")
@@ -84,16 +150,19 @@ def penyimpananData():
 Masukkan Pilihan Berikut Untuk Melanjutkan:
 1. Lihat Data Pengguna Terdaftar
 2. Masukkan Data Pengguna
-3. Kembali ke Menu Utama
+3. Ubah Data Pengguna
+4. Kembali ke Menu Utama
 """
         )
     option = input("Pilihan: ")
-    match option:
+    match option: 
         case '1':
             lihatDataPengguna()
         case '2':
             simpanDataPengguna()
         case '3':
+            verifikasiUbahDataPengguna()
+        case '4':
             main()
         case _:
             salahInputHandle(penyimpananData)
