@@ -120,9 +120,13 @@ def verifikasiUbahDataPengguna():
                         os.system("clear")
                         dataToUpdate = list(dataUser[0])
                         print("Masukkan Data Baru Untuk diUpdate Ke Pengguna Yang Bersangkutan: ")
-                        dataToUpdate[1] = input("Nama: ")
-                        dataToUpdate[2] = input("Umur: ")
-                        dataToUpdate[3] = input("Alamat: ")
+                        namaBaru = input("Nama: ")
+                        umurBaru = input("Umur: ")
+                        alamatBaru = input("Alamat: ")
+                        
+                        dataToUpdate[1] = namaBaru if (namaBaru.__len__() > 1 and not namaBaru.isspace()) else dataToUpdate[1]
+                        dataToUpdate[2] = umurBaru if (umurBaru.__len__() > 1 and not umurBaru.isspace()) else dataToUpdate[2]
+                        dataToUpdate[3] = alamatBaru if (alamatBaru.__len__() > 1 and not alamatBaru.isspace()) else dataToUpdate[3]
                         
                         cursor.execute(f"UPDATE tb_data_pengguna SET nama='{dataToUpdate[1]}', umur='{dataToUpdate[2]}', alamat='{dataToUpdate[3]}' WHERE id={idToUpdate}")
                         connection.commit()
