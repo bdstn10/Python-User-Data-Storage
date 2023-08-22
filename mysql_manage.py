@@ -75,6 +75,11 @@ def simpanDataPengguna():
         input("\nEnter To Continue... ")
         penyimpananData()
 
+# Membuat method untuk mengecek apakah suatu variable berupa null atau whitespace
+def isVarNotNullOrSpace(var):
+    return (var.__len__() >= 1 and not var.isspace())
+
+
 def verifikasiUbahDataPengguna():
     os.system("clear")
     print("Masukkan Id Pengguna Yang Ingin diUbah Datanya")
@@ -123,10 +128,19 @@ def verifikasiUbahDataPengguna():
                         namaBaru = input("Nama: ")
                         umurBaru = input("Umur: ")
                         alamatBaru = input("Alamat: ")
+    
+                        if isVarNotNullOrSpace(namaBaru) and not namaBaru.isalpha():
+                            print("Mohon isi nama hanya dengan huruf alphabet!")
+                            input("\nEnter To Continue... ")
+                            penyimpananData()
+                        if isVarNotNullOrSpace(umurBaru) and not umurBaru.isnumeric():
+                            print("Mohon isi umur hanya dengan angka saja!")
+                            input("\nEnter To Continue... ")
+                            penyimpananData()
                         
-                        dataToUpdate[1] = namaBaru if (namaBaru.__len__() > 1 and not namaBaru.isspace()) else dataToUpdate[1]
-                        dataToUpdate[2] = umurBaru if (umurBaru.__len__() > 1 and not umurBaru.isspace()) else dataToUpdate[2]
-                        dataToUpdate[3] = alamatBaru if (alamatBaru.__len__() > 1 and not alamatBaru.isspace()) else dataToUpdate[3]
+                        dataToUpdate[1] = namaBaru if isVarNotNullOrSpace(namaBaru) else dataToUpdate[1]
+                        dataToUpdate[2] = umurBaru if isVarNotNullOrSpace(umurBaru) else dataToUpdate[2]
+                        dataToUpdate[3] = alamatBaru if isVarNotNullOrSpace(alamatBaru) else dataToUpdate[3]
                         
                         cursor.execute(f"UPDATE tb_data_pengguna SET nama='{dataToUpdate[1]}', umur='{dataToUpdate[2]}', alamat='{dataToUpdate[3]}' WHERE id={idToUpdate}")
                         connection.commit()
