@@ -79,7 +79,6 @@ def simpanDataPengguna():
 def isVarNotNullOrSpace(var):
     return (var.__len__() >= 1 and not var.isspace())
 
-
 def verifikasiUbahDataPengguna():
     os.system("clear")
     print("Masukkan Id Pengguna Yang Ingin diUbah Datanya")
@@ -158,7 +157,66 @@ def verifikasiUbahDataPengguna():
                 
     except Error as e:
         print(e)
+
+def hapusDataPengguna():
+    os.system("clear")
+    print("Masukkan Id Pengguna Yang Ingin diHapus Datanya")
+    idToDelete = input("Id: ")
     
+    if (idToDelete.__len__() < 1) or not idToDelete.isnumeric():
+        print("Mohon Masukkan Id Pengguna Dengan Benar!")
+        
+        input("\nEnter Untuk Kembali... ")
+        hapusDataPengguna()
+    
+    try:
+        with connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="testing_python_mysql"
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(f"select * from tb_data_pengguna where id={idToDelete}")
+                dataUser =  cursor.fetchall()
+                
+                # Pengecekan untuk memastikan data yang hendak diubah terdapat di sistem
+                if cursor.rowcount < 1:
+                    print("Maaf, data yang anda minta tidak terdapat di sistem!")
+                    input("\nEnter To Continue... ")
+                    penyimpananData()
+                
+                # os.system("clear")
+                print("Apakah data berikut yang ingin anda hapus: ")    
+                
+                for data in dataUser:
+                    print(f"\nId: {data[0]}")
+                    print(f"Nama: {data[1]}")
+                    print(f"Umur: {data[2]}")
+                    print(f"Alamat: {data[3]}")
+                
+                konfirmasiAksi = input("\ny/(Yes), n/(No), b/(Back)? ")
+                
+                match konfirmasiAksi:
+                    case 'y':
+                        os.system("clear")
+                        
+                        cursor.execute(f"DELETE FROM tb_data_pengguna where id='{idToDelete}'")
+                        connection.commit()
+                        
+                        if cursor.rowcount > 0:
+                            print("Berhasil Menghapus Data User!")
+                            input("\nEnter To Continue... ")
+                            penyimpananData()
+                    case 'n':
+                        hapusDataPengguna()
+                    case 'b':
+                        penyimpananData()
+                    case _:
+                        salahInputHandle(penyimpananData)
+    except Error as e:
+        print(e)
+
 def penyimpananData():
     os.system("clear")
     print("="*5, "Tool Penyimpanan Data",5*"=")
@@ -169,7 +227,8 @@ Masukkan Pilihan Berikut Untuk Melanjutkan:
 1. Lihat Data Pengguna Terdaftar
 2. Masukkan Data Pengguna
 3. Ubah Data Pengguna
-4. Kembali ke Menu Utama
+4. Hapus Data Pengguna
+5. Kembali ke Menu Utama
 """
         )
     option = input("Pilihan: ")
@@ -181,6 +240,8 @@ Masukkan Pilihan Berikut Untuk Melanjutkan:
         case '3':
             verifikasiUbahDataPengguna()
         case '4':
+            hapusDataPengguna()
+        case '5':
             main()
         case _:
             salahInputHandle(penyimpananData)
